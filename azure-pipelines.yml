@@ -1,0 +1,28 @@
+
+resources:
+  containers:
+  - container: main_container
+    image: golang
+  - container: mongodb
+    image: mongo:latest
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+container: main_container
+
+services:
+  mongodb: mongodb
+
+variables:
+  mongodb_uri: 'mongodb://mongodb:27017'
+
+steps:
+- task: Go@0
+  displayName: Unit and integration tests
+  inputs:
+    command: 'test'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
