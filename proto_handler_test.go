@@ -2,6 +2,8 @@ package main
 
 import (
     "context"
+    "net/http"
+    "net/http/httptest"
     "strings"
     "testing"
     "go.mongodb.org/mongo-driver/mongo"
@@ -21,6 +23,14 @@ type services struct {
     phandler *ProtoHandler
 }
 
+// helper function for checking and logging respone status
+func CheckStatusCode(t *testing.T, rr *httptest.ResponseRecorder, expected int) {
+    if status := rr.Code; status != expected {
+        t.Errorf("\033[31mWrong response status code: got %v want %v, body:\n%s\033[39m",
+            status, expected, rr.Body.String())
+    }
+}
+
 func getServices(t *testing.T) *services {
     services := services{}
     services.log = test.GetLogger(t)
@@ -37,6 +47,22 @@ func getServices(t *testing.T) *services {
 
 func contains(t *testing.T, str, pattern string) {
     test.Assert(t, strings.Contains(str, pattern), "String <" + str + "> doesn't contain <" + pattern + ">")
+}
+
+func TestPacketInvalid(t *testing.T) {
+
+    const DEVICE = "device01"
+
+    s := getServices(t)
+
+    req, err := http.NewRequest("POST", "/", strings.NewReader(""))
+    test.Ok(t, err)
+
+    rr := httptest.NewRecorder()
+
+    s.phandler.ServeHTTP(rr, req)
+
+    CheckStatusCode(t, rr, 400)
 }
 
 func TestPacketDeviceReg(t *testing.T) {

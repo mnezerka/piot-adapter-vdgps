@@ -38,8 +38,9 @@ func (h *ProtoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
     packet, err := ProtoParse(h.log, r.Body)
     if err != nil {
-        h.log.Fatalf("Parsing request body failed: %s", err)
+        h.log.Errorf("Parsing request body failed: %s", err)
         http.Error(w, err.Error(), http.StatusBadRequest)
+        return
     }
 
     h.log.Debugf("Packet successfully parsed (%d locations)", len(packet.Locs))
