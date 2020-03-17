@@ -9,5 +9,5 @@ CMD ["./piot-adapter-vdgps"]
 FROM alpine:latest AS alpine
 COPY --from=builder /app/piot-adapter-vdgps /app/piot-adapter-vdgps
 WORKDIR /app/
-EXPOSE 8888
+EXPOSE 8080
 CMD ["./piot-adapter-vdgps"]
