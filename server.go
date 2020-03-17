@@ -62,7 +62,7 @@ func runServer(c *cli.Context) {
     mqtt.SetUsername(mqttUsername)
     mqtt.SetPassword(mqttPassword)
     mqtt.SetClient(mqttClient)
-    err = mqtt.Connect()
+    err = mqtt.Connect(false)
     if err != nil {
         logger.Fatalf("Connect to mqtt server failed %v", err)
         os.Exit(1)
@@ -141,7 +141,6 @@ func main() {
             Value:  "mongodb://localhost:27017",
             EnvVar: "MONGODB_URI",
         },
- 
     }
 
     app.Run(os.Args)
