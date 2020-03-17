@@ -50,31 +50,6 @@ func runServer(c *cli.Context) {
     /////////////// ORGS service
     orgs := piot.NewOrgs(logger, db)
 
-    /*
-
-    /////////////// HTTP CLIENT service
-    var httpClient piot.IHttpClient
-    httpClient = piot.NewHttpClient(logger)
-
-    /////////////// PIOT INFLUXDB SERVICE
-    influxDbUri := c.GlobalString("influxdb-uri")
-    influxDbUsername := c.GlobalString("influxdb-user")
-    influxDbPassword := c.GlobalString("influxdb-password")
-    influxDb := piot.NewInfluxDb(logger, orgs, httpClient, influxDbUri, influxDbUsername, influxDbPassword)
-
-    /////////////// PIOT MYSQLDB SERVICE
-    mysqlDbHost := c.GlobalString("mysqldb-host")
-    mysqlDbUsername := c.GlobalString("mysqldb-user")
-    mysqlDbPassword := c.GlobalString("mysqldb-password")
-    mysqlDbName := c.GlobalString("mysqldb-name")
-    mysqlDb := piot.NewMysqlDb(logger, orgs, mysqlDbHost, mysqlDbUsername, mysqlDbPassword, mysqlDbName)
-    err = mysqlDb.Open()
-    if err != nil {
-        logger.Fatalf("Connect to mysql server failed %v", err)
-        os.Exit(1)
-    }
-    */
-
     //////////////// THINGS service instance
     things := piot.NewThings(db, logger)
 
@@ -96,6 +71,7 @@ func runServer(c *cli.Context) {
     /////////////// PIOT DEVICES service instance
     piotDevices := piot.NewPiotDevices(logger, things, mqtt, cfg)
 
+    /////////////// HTTP HANDLERS
     protoHandler := NewProtoHandler(logger, piotDevices, things, mqtt)
     http.Handle("/", protoHandler)
 
@@ -128,20 +104,20 @@ func main() {
         cli.StringFlag{
             Name:   "bind-address,b",
             Usage:  "Listen address for API HTTP endpoint",
-            Value:  "0.0.0.0:8888",
+            Value:  "0.0.0.0:8080",
             EnvVar: "BIND_ADDRESS",
-        },
-        cli.StringFlag{
-            Name:   "mqtt-uri,q",
-            Usage:  "Endpoint for the Mosquitto message broker",
-            EnvVar: "MQTT_URI",
-            Value:  "tcp://localhost:1883",
         },
         cli.StringFlag{
             Name:   "log-level,l",
             Usage:  "Logging level",
             Value:  "INFO",
             EnvVar: "LOG_LEVEL",
+        },
+        cli.StringFlag{
+            Name:   "mqtt-uri,q",
+            Usage:  "Endpoint for the Mosquitto message broker",
+            EnvVar: "MQTT_URI",
+            Value:  "tcp://localhost:1883",
         },
         cli.StringFlag{
             Name:   "mqtt-user",
