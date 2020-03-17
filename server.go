@@ -135,6 +135,13 @@ func main() {
             Value:  "piot-adapter-vdgps",
             EnvVar: "MQTT_CLIENT",
         },
+        cli.StringFlag{
+            Name:   "mongodb-uri,m",
+            Usage:  "URI for the mongo database",
+            Value:  "mongodb://localhost:27017",
+            EnvVar: "MONGODB_URI",
+        },
+ 
     }
 
     app.Run(os.Args)
