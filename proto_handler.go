@@ -13,7 +13,7 @@ import (
 const TOPIC_LOCATION = "location"
 const MQTT_LAT = "lat"
 const MQTT_LNG = "lng"
-const MQTT_DATE = "ts"
+const MQTT_TS = "ts"
 const MQTT_SAT = "sat"
 
 type ProtoHandler struct {
@@ -72,7 +72,7 @@ func (h *ProtoHandler) processPacket(packet *ProtoPacket) error {
         if err := h.things.SetLocationMqttTopic(thing.Id, TOPIC_LOCATION); err != nil {
             return err
         }
-        if err := h.things.SetLocationMqttValues(thing.Id, MQTT_LAT, MQTT_LNG, MQTT_DATE); err != nil {
+        if err := h.things.SetLocationMqttValues(thing.Id, MQTT_LAT, MQTT_LNG, MQTT_SAT, MQTT_TS); err != nil {
             return err
         }
 

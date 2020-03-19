@@ -89,10 +89,11 @@ func TestPacketDeviceReg(t *testing.T) {
     test.Ok(t, err)
     test.Equals(t, DEVICE, thing.Name)
     test.Equals(t, model.THING_TYPE_DEVICE, thing.Type)
-    test.Equals(t, TOPIC_LOCATION, thing.LocationTopic)
-    test.Equals(t, MQTT_LAT, thing.LocationLatValue)
-    test.Equals(t, MQTT_LNG, thing.LocationLngValue)
-    test.Equals(t, MQTT_DATE, thing.LocationDateValue)
+    test.Equals(t, TOPIC_LOCATION, thing.LocationMqttTopic)
+    test.Equals(t, MQTT_LAT, thing.LocationMqttLatValue)
+    test.Equals(t, MQTT_LNG, thing.LocationMqttLngValue)
+    test.Equals(t, MQTT_SAT, thing.LocationMqttSatValue)
+    test.Equals(t, MQTT_TS, thing.LocationMqttTsValue)
 
     // check that no mqtt msgs were sent out
     test.Equals(t, 0, len(s.mqtt.Calls))

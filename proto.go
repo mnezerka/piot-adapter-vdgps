@@ -81,10 +81,10 @@ func ProtoParse(log *logging.Logger, data io.Reader) (*ProtoPacket, error) {
         position := i * 13;
 
         // lat - 4 bytes
-        m.Latitude = float64(binary.LittleEndian.Uint32(packet[position + 5:])) / float64(10000000)
+        m.Latitude = float64(binary.LittleEndian.Uint32(packet[position + 9:])) / 10000000.0
 
         // lng  - 4 bytes
-        m.Longitude = float64(binary.LittleEndian.Uint32(packet[position + 9:])) / 10000000.0
+        m.Longitude = float64(binary.LittleEndian.Uint32(packet[position + 5:])) / 10000000.0
 
         // satelites - 1 byte
         m.Satelites = int32(packet[position + 4])
