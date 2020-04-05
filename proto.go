@@ -27,6 +27,10 @@ type GpsMeasurement struct {
     Satelites int32 `json:"sat"`
 }
 
+func BitCheck(b byte, nbit uint) bool {
+    return  (b & (1 << nbit)) > 0
+}
+
 func ProtoParse(log *logging.Logger, data io.Reader) (*ProtoPacket, error) {
 
     body, err := ioutil.ReadAll(data)
@@ -61,11 +65,19 @@ func ProtoParse(log *logging.Logger, data io.Reader) (*ProtoPacket, error) {
         log.Errorf("Reading request body failed on parsing voltage block: %s", err)
         return nil, err
     }
-    log.Debugf("Voltage %s", result.Voltage)
+    log.Debugf("Voltage %f", result.Voltage)
 
-    // parse string repr. of battery level
-    // battery_str := string(blocks[3][:])
-    // log.Debugf("Battery %s", battery_str)
+    // parse flags
+    flags := blocks[3][0]
+    log.Debugf("Flags %d %t", flags, flags)
+    log.Debugf("  bit0: %v", BitCheck(flags, 0))
+    log.Debugf("  bit1: %v", BitCheck(flags, 1))
+    log.Debugf("  bit2: %v", BitCheck(flags, 2))
+    log.Debugf("  bit3: %v", BitCheck(flags, 3))
+    log.Debugf("  bit4: %v", BitCheck(flags, 4))
+    log.Debugf("  bit5: %v", BitCheck(flags, 5))
+    log.Debugf("  bit6: %v", BitCheck(flags, 6))
+    log.Debugf("  bit7: %v", BitCheck(flags, 7))
 
     // gps data are stored in 4th block
     packet := blocks[4]
